@@ -1,13 +1,3 @@
-
-//twitter
-var keys = require("./keys.js");
-var twitter = require("twitter");
-var client = new twitter(keys.twitterKeys);
-//spotify
-var spotify = require("spotify");
-//OMDB + request 
-var request = require("request");
-
 //get user input
 var input = process.argv;
 var command = input[2];
@@ -23,6 +13,10 @@ for (var i = 4; i < input.length; i++){  //make one string of all extra argument
 
 //display last 20 tweets
 function myTweets(){
+    //twitter
+    var keys = require("./keys.js");
+    var twitter = require("twitter");
+    var client = new twitter(keys.twitterKeys);
     //log a blank space
     console.log("");
     //log all the tweets
@@ -44,6 +38,8 @@ function myTweets(){
 
 //get song information from spotify
 function spotifySong(songName){
+    //spotify
+    var spotify = require("spotify");
     //log a blank space
     console.log("");
     //display the song information
@@ -68,7 +64,9 @@ function spotifySong(songName){
 
 //get song information from OMDB
 function movieThis(movieName){
-    console.log(movieName);
+    //OMDB + request 
+    var request = require("request");
+    
     //check to see if a movieName was entered
     if (movieName === ""){
         movieName = "Mr. Nobody"; //is it ok to have blank spaces in the movie name?
@@ -115,16 +113,47 @@ function movieThis(movieName){
 
 //run the text file
 function doWhatItSays(){
-    
+    var fs = require("fs");
+    //get the input from the text file
+    fs.readFile("random.txt", "utf8", function(error, data){
+        if (error){
+            console.log("an error occured when trying to read random.txt");
+        } else {
+            //store the contents of the file
+            var inputArray = data.split(",");
+            //get the contents ready for the liri app
+            var command = inputArray[0];
+            if (!!inputArray[1]){  //if a fourth argument is passed, store it
+                var argumentString = inputArray[1];
+            } else {
+                var argumentString = ""; //if a fourth element is not passed, fill the argument variable with a blank string 
+            };
+            for (var i = 2; i < inputArray.length; i++){  //make one string of all extra arguments in case the song or movie is more than one word
+                argumentString = argumentString + " " + inputArray[i];
+                console.log(argumentString);
+            };
+
+            console.log(command);
+            console.log(argumentString);
+            //run the liri application
+            runLiri(command, argumentString);
+        };
+    });
 };
 
-//process input 
-if (command === "my-tweets"){
-    myTweets();
-} else if (command === "spotify-this-song"){
-    spotifySong(argumentString);
-} else if (command === "movie-this"){
-    movieThis(argumentString);
-} else if (command === "do-what-it-says"){
-    doWhatItSays();
-};
+//a function to run the decision making and output of Liri
+function runLiri(operation, otherArguments){
+    //process input 
+    if (operation === "my-tweets"){
+        myTweets();
+    } else if (operation === "spotify-this-song"){
+        spotifySong(otherArguments);
+    } else if (operation === "movie-this"){
+        movieThis(argumentString);
+    } else if (operation === "do-what-it-says"){
+        doWhatItSays();
+    };
+}
+
+//run the application
+runLiri(command, argumentString);
