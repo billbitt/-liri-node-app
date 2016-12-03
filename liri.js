@@ -1,7 +1,8 @@
 
 //get the keys from keys.js
 var keys = require("./keys.js");
-    //keys.twitterKeys
+var twitter = require("twitter");
+var client = new twitter(keys.twitterKeys);
 
 //get user input
 var input = process.argv;
@@ -10,8 +11,23 @@ var argument = input[3];
 
 //display last 20 tweets
 function myTweets(){
-    //do stuff
-    
+    //log a blank space
+    console.log("");
+    //log all the tweets
+    client.get('statuses/user_timeline', {count: "20"}, function(error, tweets, response) {
+        if(error) {
+            return console.log("an error occurred finding your tweets");
+        } else {
+            //console.log(tweets);  // The favorites. 
+            for (var i = 0; i < tweets.length; i++){
+                console.log("tweet #" + (i + 1));
+                console.log(tweets[i].text);
+                console.log("");
+            };
+            //console.log(response);  // Raw response object. 
+        };
+    });
+
 };
 
 //get song information from spotify
