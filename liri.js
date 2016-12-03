@@ -1,16 +1,25 @@
 
-//get the keys from keys.js
+//twitter
 var keys = require("./keys.js");
 var twitter = require("twitter");
 var client = new twitter(keys.twitterKeys);
-
 //spotify
 var spotify = require("spotify");
+//OMDB + request 
+var request = require("request");
 
 //get user input
 var input = process.argv;
 var command = input[2];
-var argument = input[3];
+if (!!input[3]){  //if a fourth argument is passed, store it
+    var argumentString = input[3];
+} else {
+    var argumentString = ""; //if a fourth element is not passed, fill the argument variable with a blank string 
+};
+for (var i = 4; i < input.length; i++){  //make one string of all extra arguments in case the song or movie is more than one word
+    argumentString = argumentString + " " + input[i];
+    console.log(argumentString);
+};
 
 //display last 20 tweets
 function myTweets(){
@@ -59,22 +68,63 @@ function spotifySong(songName){
 
 //get song information from OMDB
 function movieThis(movieName){
+    console.log(movieName);
+    //check to see if a movieName was entered
+    if (movieName === ""){
+        movieName = "Mr. Nobody"; //is it ok to have blank spaces in the movie name?
+    };
 
+    //create the request URL
+    var queryURL = "http://omdbapi.com/?t=" + movieName + "&tomatoes=true" + "&r=json";
+    //make the request
+    request(queryURL, function(error, response, body){  
+        if (error) {
+            console.log("An error occured finding your movie.");
+            console.log("error: " + error);
+            return
+        };
+
+        if (response.statusCode !== 200) {
+            console.log("Something went wrong. StatusCode: " + response.statusCode);
+        };
+
+        var result = JSON.parse(body);
+        //console.log(result);
+        //log a blank space
+        console.log("");
+        //Title of the movie.
+        console.log("Title: " + result.Title);
+        //Year the movie came out.
+        console.log("Year: " + result.Year);
+        //IMDB Rating of the movie.
+        console.log("IMDB Rating: " + result.imdbRating);
+        //Country where the movie was produced.
+        console.log("Country of Production: " + result.Country);
+        //Language of the movie.
+        console.log("Language: " + result.Language);
+        //Plot of the movie.
+        console.log("Plot Summary: " + result.Plot);
+        //Actors in the movie.
+        console.log("Actors: " + result.Actors);
+        //Rotten Tomatoes Rating.
+        console.log("Rotten Tomatoes Rating: " + result.tomatoRating);
+        //Rotten Tomatoes URL.
+        console.log("Rotten Tomatoes URL: " + result.tomatoURL);
+    });
 };
 
 //run the text file
 function doWhatItSays(){
-
+    
 };
 
 //process input 
 if (command === "my-tweets"){
     myTweets();
 } else if (command === "spotify-this-song"){
-    spotifySong(argument);
+    spotifySong(argumentString);
 } else if (command === "movie-this"){
-    movieThis(argument);
+    movieThis(argumentString);
 } else if (command === "do-what-it-says"){
     doWhatItSays();
-}
-
+};
