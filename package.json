@@ -1,0 +1,31 @@
+{
+  "name": "liri-node-app",
+  "version": "1.0.0",
+  "description": "billbitt's liri app",
+  "main": "liri.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/billbitt/liri-node-app.git"
+  },
+  "keywords": [
+    "node",
+    "npm",
+    "javascript",
+    "liri",
+    "twitter",
+    "spotify",
+    "omdb"
+  ],
+  "author": "billbitt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/billbitt/liri-node-app/issues"
+  },
+  "homepage": "https://github.com/billbitt/liri-node-app#readme",
+  "dependencies": {
+    "twitter": "^1.5.0"
+  }
+}
