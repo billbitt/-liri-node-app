@@ -84,7 +84,7 @@ function movieThis(movieName){
     var request = require("request");
     //check to see if a movieName was entered
     if (movieName === ""){
-        movieName = "Mr. Nobody"; //is it ok to have blank spaces in the movie name?
+        movieName = "Mr. Nobody";
     };
     //create the request URL
     var queryURL = "http://omdbapi.com/?t=" + movieName + "&tomatoes=true" + "&r=json";
